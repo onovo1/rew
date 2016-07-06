@@ -87,11 +87,11 @@ static void destructor(void *arg)
 	if (req->granted && req->lifetime && req->mb) {
 
 		/* set the lifetime to zero */
-		req->mb->pos = 4;
+		/*req->mb->pos = 4;
 		mbuf_write_u32(req->mb, 0);
 
 		req->mb->pos = 0;
-		(void)udp_send(req->us, &req->srv, req->mb);
+		(void)udp_send(req->us, &req->srv, req->mb);*/
 	}
 
 	tmr_cancel(&req->tmr);
