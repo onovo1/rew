@@ -42,7 +42,6 @@ struct pcp_request {
 	void *arg;
 };
 
-
 /*
  * RT:   Retransmission timeout
  * IRT:  Initial retransmission time, SHOULD be 3 seconds
@@ -106,6 +105,7 @@ static void completed(struct pcp_request *req, int err, struct pcp_msg *msg)
 {
 	pcp_resp_h *resph = req->resph;
 	void *arg = req->arg;
+	request_result = 0;
 
 	tmr_cancel(&req->tmr);
 	tmr_cancel(&req->tmr_dur);
@@ -114,6 +114,7 @@ static void completed(struct pcp_request *req, int err, struct pcp_msg *msg)
 	   response handler once and never again */
 	if (err || msg->hdr.result != PCP_SUCCESS ) {
 		req->resph = NULL;
+		request_result = 1;
 	}
 
 	if (resph)
@@ -153,6 +154,10 @@ static void timeout(void *arg)
 	tmr_start(&req->tmr, req->RT * 1000, timeout, req);
 }
 
+int is_request_no_authorized(void)
+{
+	return (request_result);
+}
 
 static void timeout_duration(void *arg)
 {
@@ -324,6 +329,7 @@ int pcp_request(struct pcp_request **reqp, const struct pcp_conf *conf,
 {
 	va_list ap;
 	int err;
+	request_result = 0;
 
 	va_start(ap, optionc);
 	err = pcp_vrequest(reqp, conf, srv, opcode, lifetime, payload,
