@@ -146,7 +146,6 @@ int request_result;/* Outcome of the request */
 
 typedef void (pcp_resp_h)(int err, struct pcp_msg *msg, void *arg);
 
-int is_request_no_authorized(void);
 int pcp_request(struct pcp_request **reqp, const struct pcp_conf *conf,
 		const struct sa *pcp_server, enum pcp_opcode opcode,
 		uint32_t lifetime, const void *payload,

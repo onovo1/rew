@@ -16,7 +16,6 @@
 #include <re_pcp.h>
 #include "pcp.h"
 
-
 /*
  * Defines a PCP client request
  *
@@ -152,11 +151,6 @@ static void timeout(void *arg)
 
 	req->RT = RT_next(&req->conf, req->RT);
 	tmr_start(&req->tmr, req->RT * 1000, timeout, req);
-}
-
-int is_request_no_authorized(void)
-{
-	return (request_result);
 }
 
 static void timeout_duration(void *arg)
@@ -321,7 +315,6 @@ static int pcp_vrequest(struct pcp_request **reqp, const struct pcp_conf *conf,
 	return err;
 }
 
-
 int pcp_request(struct pcp_request **reqp, const struct pcp_conf *conf,
 		const struct sa *srv, enum pcp_opcode opcode,
 		uint32_t lifetime, const void *payload,
@@ -332,6 +325,7 @@ int pcp_request(struct pcp_request **reqp, const struct pcp_conf *conf,
 	request_result = 0;
 
 	va_start(ap, optionc);
+
 	err = pcp_vrequest(reqp, conf, srv, opcode, lifetime, payload,
 			   resph, arg, optionc, ap);
 	va_end(ap);
